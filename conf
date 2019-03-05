@@ -1,0 +1,28 @@
+#!/bin/bash
+set -exuo pipefail
+
+apt-get install "php${PRODUCT_VERSION}-fpm"
+set_config () { sed -i "s#^;\?\(${2}\) = .*\$#\1 = ${3}#" "${1}"; }
+
+CONFIG="/etc/php/${PRODUCT_VERSION}/fpm/php-fpm.conf"
+POOL_CONFIG="/etc/php/${PRODUCT_VERSION}/fpm/pool.d/www.conf"
+
+set_config "${CONFIG}" daemonize no
+set_config "${CONFIG}" error_log '/proc/self/fd/2'
+set_config "${CONFIG}" systemd_interval 0
+
+set_config "${POOL_CONFIG}" listen 9000
+set_config "${POOL_CONFIG}" clear_env no
+set_config "${POOL_CONFIG}" catch_workers_output yes
+set_config "${POOL_CONFIG}" access.log '/dev/null'
+# for debugging PHP apps:
+# set_config ${POOL_CONFIG} access.log '/proc/self/fd/2'
+# set_config ${POOL_CONFIG} 'php_admin_value\[error_log\]' '/proc/self/fd/2'
+# set_config ${POOL_CONFIG} 'php_flag\[display_errors\]' on
+
+mkdir -p /var/www/html /run/php /var/lib/php/sessions
+chown -R www-data:www-data /var/www/html /run/php /var/lib/php/sessions
+
+# convenience and substitute for disabled debian alternatives
+ln -s "/usr/bin/php${PRODUCT_VERSION}" /usr/bin/php
+ln -s "/usr/sbin/php-fpm${PRODUCT_VERSION}" /usr/bin/php-fpm

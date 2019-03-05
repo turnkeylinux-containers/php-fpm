@@ -1,0 +1,20 @@
+{
+    "build": {
+        "KEEP_USER": "www-data"
+    },
+    "meta": {
+        "name": "php-fpm",
+        "version": "7.2",
+        "containers": [
+            {
+                "name": "php-fpm",
+                "version": "7.2",
+                "ports": {
+                    "9000": "tcp"
+                },
+                "cpu": 256,
+                "ram": 512
+            }
+        ]
+    }
+}
