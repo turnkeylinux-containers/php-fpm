@@ -2,13 +2,13 @@
     "meta": {
         "build_args": {
             "PRODUCT_NAME": "php-fpm",
-            "PRODUCT_VERSION": "7.2",
+            "PRODUCT_VERSION": "7.3",
             "KEEP_USER": "www-data"
         },
         "containers": [
             {
                 "name": "php-fpm",
-                "version": "7.2",
+                "version": "7.3",
                 "ports": { "9000": "tcp" },
                 "cpu": 256,
                 "ram": 512
